@@ -1,0 +1,16 @@
+service: mabel
+frameworkVersion: '3'
+provider:
+  name: aws
+  runtime: python3.10
+  stage: production
+  region: eu-west-2
+  environment:
+    FIREBASE_PROJECT_ID: ${ssm:mabel-firebase-project-id}
+    FIREBASE_PRIVATE_KEY_ID: ${ssm:mabel-firebase-private-key-id}
+    FIREBASE_PRIVATE_KEY: ${ssm:mabel-firebase-private-key}
+    FIREBASE_CLIENT_EMAIL: ${ssm:mabel-firebase-client-email}
+    FIREBASE_CLIENT_ID: ${ssm:mabel-firebase-client-id}
+functions:
+  hello:
+    handler: handler.hello
