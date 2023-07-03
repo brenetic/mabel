@@ -11,6 +11,22 @@ provider:
     FIREBASE_PRIVATE_KEY: ${ssm:mabel-firebase-private-key}
     FIREBASE_CLIENT_EMAIL: ${ssm:mabel-firebase-client-email}
     FIREBASE_CLIENT_ID: ${ssm:mabel-firebase-client-id}
+    SLACK_BOT_TOKEN: ${ssm:mabel-slack-bot-token}
+    SLACK_SIGNING_SECRET: ${ssm:mabel-slack-signing-secret}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource: ${ssm:mabel-lambda-slack-arn}
 functions:
   hello:
     handler: handler.hello
+  slack:
+    handler: src/handlers/slack/slack.handler
+    events:
+      - http:
+          path: slack/events
+          method: post
+          cors: true
+plugins:
+  - serverless-python-requirements

@@ -28,4 +28,5 @@ jobs:
           echo "region=eu-west-2" >> ~/.aws/config
       - name: Deploy with Serverless Framework
         run: |
+          serverless plugin install -n serverless-python-requirements
           serverless deploy --aws-profile default --stage production

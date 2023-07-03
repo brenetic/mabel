@@ -18,7 +18,10 @@ var/
 *.egg
 
 .env
+.venv
 venv
 
 # Serverless directories
 .serverless
+
+**/__pycache__/
