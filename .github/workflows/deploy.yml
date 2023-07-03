@@ -1,0 +1,31 @@
+name: Deploy to AWS
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10.12
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Install Serverless Framework
+        run: npm install -g serverless@3
+      - name: Set up AWS credentials
+        run: |
+          mkdir -p ~/.aws
+          echo "[default]" > ~/.aws/credentials
+          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+          echo "[default]" > ~/.aws/config
+          echo "region=eu-west-2" >> ~/.aws/config
+      - name: Deploy with Serverless Framework
+        run: |
+          serverless deploy --aws-profile default --stage production
