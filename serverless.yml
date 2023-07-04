@@ -15,7 +15,9 @@ provider:
     - Effect: Allow
       Action:
         - lambda:InvokeFunction
-      Resource: ${ssm:sikozu-lambda-slack-arn}
+      Resource:
+        - arn:aws:lambda:eu-west-2:${ssm:account-number}:function:sikozu-production-slack
+        - arn:aws:lambda:eu-west-2:${ssm:account-number}:function:sikozu-production-telegram
 functions:
   slack:
     environment:
@@ -27,6 +29,15 @@ functions:
           path: slack/events
           method: post
           cors: true
+  telegram:
+    environment:
+      TELEGRAM_BOT_TOKEN: ${ssm:sikozu-telegram-bot-token}
+      TELEGRAM_ADMIN_USER_ID: ${ssm:sikozu-telegram-admin-user-id}
+    handler: src/handlers/telegram/telegram.handler
+    events:
+      - http:
+          path: /telegram/messages
+          method: post
 package:
   exclude:
     - node_modules/**
