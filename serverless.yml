@@ -29,5 +29,10 @@ functions:
           path: slack/events
           method: post
           cors: true
+package:
+  exclude:
+    - node_modules/**
+    - '**/.pytest_cache/**'
+    - '**/__pycache__/**'
 plugins:
   - serverless-python-requirements
