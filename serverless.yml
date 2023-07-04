@@ -17,8 +17,6 @@ provider:
         - lambda:InvokeFunction
       Resource: ${ssm:sikozu-lambda-slack-arn}
 functions:
-  hello:
-    handler: handler.hello
   slack:
     environment:
       SLACK_BOT_TOKEN: ${ssm:sikozu-slack-bot-token}
