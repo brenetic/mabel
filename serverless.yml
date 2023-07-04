@@ -1,4 +1,4 @@
-service: mabel
+service: sikozu
 frameworkVersion: '3'
 provider:
   name: aws
@@ -6,22 +6,23 @@ provider:
   stage: production
   region: eu-west-2
   environment:
-    FIREBASE_PROJECT_ID: ${ssm:mabel-firebase-project-id}
-    FIREBASE_PRIVATE_KEY_ID: ${ssm:mabel-firebase-private-key-id}
-    FIREBASE_PRIVATE_KEY: ${ssm:mabel-firebase-private-key}
-    FIREBASE_CLIENT_EMAIL: ${ssm:mabel-firebase-client-email}
-    FIREBASE_CLIENT_ID: ${ssm:mabel-firebase-client-id}
-    SLACK_BOT_TOKEN: ${ssm:mabel-slack-bot-token}
-    SLACK_SIGNING_SECRET: ${ssm:mabel-slack-signing-secret}
+    FIREBASE_PROJECT_ID: ${ssm:sikozu-firebase-project-id}
+    FIREBASE_PRIVATE_KEY_ID: ${ssm:sikozu-firebase-private-key-id}
+    FIREBASE_PRIVATE_KEY: ${ssm:sikozu-firebase-private-key}
+    FIREBASE_CLIENT_EMAIL: ${ssm:sikozu-firebase-client-email}
+    FIREBASE_CLIENT_ID: ${ssm:sikozu-firebase-client-id}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - lambda:InvokeFunction
-      Resource: ${ssm:mabel-lambda-slack-arn}
+      Resource: ${ssm:sikozu-lambda-slack-arn}
 functions:
   hello:
     handler: handler.hello
   slack:
+    environment:
+      SLACK_BOT_TOKEN: ${ssm:sikozu-slack-bot-token}
+      SLACK_SIGNING_SECRET: ${ssm:sikozu-slack-signing-secret}
     handler: src/handlers/slack/slack.handler
     events:
       - http:
