@@ -30,3 +30,29 @@ jobs:
         run: |
           serverless plugin install -n serverless-python-requirements
           serverless deploy --aws-profile default --stage production
+      - name: Slack notification on success
+        if: ${{ job.status == 'success' }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: 'GitHub'
+          SLACK_MSG_AUTHOR: 'GitHub'
+          SLACK_ICON: ':github:'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_TITLE: ':rocket:'
+          SLACK_MESSAGE: 'Successfully deployed sikozu'
+          SLACK_FOOTER: ''
+          MSG_MINIMAL: true
+      - name: Slack notification on failure
+        if: ${{ job.status != 'success' }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_USERNAME: 'GitHub'
+          SLACK_MSG_AUTHOR: 'GitHub'
+          SLACK_ICON: ':github:'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_TITLE: ':siren:'
+          SLACK_MESSAGE: 'Failed to deploy sikozu'
+          SLACK_FOOTER: ''
+          MSG_MINIMAL: true
